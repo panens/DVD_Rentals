@@ -8,7 +8,7 @@
             "name": "dvdrental",
             "database": "dvdrental",
             "username": "postgres",
-            "password": "sara"
+            "password": "ssara"
         }
     ]
 }
