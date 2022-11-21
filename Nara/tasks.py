@@ -74,7 +74,12 @@ def values(): #should change it to take in sql string as input so it can be used
     #https://www.dataquest.io/blog/sql-insert-tutorial/
     return values
 
+@sum
+def prettysum(x,y): 
+    k=x+y
+    print("The sum of numbers is {k}")
         
+
 customers = values() #this is returned as list of tuples 
 
 def header(): #should take the sql as input as well. 
