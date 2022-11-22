@@ -74,11 +74,6 @@ def values(): #should change it to take in sql string as input so it can be used
     #https://www.dataquest.io/blog/sql-insert-tutorial/
     return values
 
-@sum
-def prettysum(x,y): 
-    k=x+y
-    print("The sum of numbers is {k}")
-        
 
 customers = values() #this is returned as list of tuples 
 
@@ -100,6 +95,16 @@ print(df)
 
 
 print(type(customers[1]))
+
+"""SELECT 
+COUNT (rental_id),
+(SELECT customer_id as sk_customer FROM customer where customer_id = rental.customer_id), 
+rental_date as sk_date, 
+(SELECT store_id as sk_store FROM store where store_id = (SELECT store_id from inventory where inventory_id = rental.inventory_id)), 
+(SELECT film_id as sk_film FROM film where film_id = (SELECT film_id from inventory where inventory_id = rental.inventory_id)),
+(SELECT staff_id as sk_staff FROM staff where staff_id = rental.staff_id)
+from rental 
+GROUP BY """
 
 '''
 #Fact_rentals
