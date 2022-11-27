@@ -4,7 +4,9 @@ import psycopg2
 
 
 def create_cursor(): 
-    conn = psycopg2.connect(host="localhost",port="5432", dbname="dvdrental",user="postgres",password="sara")
+    with open('.vscode/MasterPassword.txt') as MasterPassword:
+      MasterPass = MasterPassword.read()
+    conn = psycopg2.connect(host="localhost",port="5432", dbname="dvdrental",user="postgres",password=MasterPass)
     cur = conn.cursor() #creates cursor
     return cur, conn #returns cursor
     
@@ -15,28 +17,27 @@ def run_sql(sql, cur, conn):
     conn.commit()
     #values = cur.fetchall()
     #return values 
-    
-"""CREATE TABLE article (
-  id SERIAL PRIMARY KEY,
-  author_id INT NOT NULL,
-  title TEXT NOT NULL,
-  content TEXT NOT NULL,
-  CONSTRAINT fk_author FOREIGN KEY(author_id) REFERENCES author(id)
-)"""
-
-"""CREATE TABLE article_tag (
-  article_id INT
-  tag_id INT
-  PRIMARY KEY (article_id, tag_id)
-  CONSTRAINT fk_article FOREIGN KEY(article_id) REFERENCES article(id)
-  CONSTRAINT fk_tag FOREIGN KEY(tag_id) REFERENCES tag(id)
-)"""
-
-
 
 cur, conn = create_cursor()  
-sql = "CREATE TABLE IF NOT EXISTS dssa.DATE as (SELECT DISTINCT rental_date as sk_date, Extract(QUARTER FROM rental_date) as quarter, Extract(year FROM rental_date) as year, Extract(month FROM rental_date) as month, Extract(day FROM rental_date) as day FROM RENTAL)"    
-    
-df = run_sql(sql, cur, conn)
 
+def create_dimension_tables(cur, conn):
+    with open('Nara/sql_dimensions.txt') as file:
+      for line in file: 
+        run_sql(line,cur,conn)
+        
+create_dimension_tables(cur, conn)
+
+def create_aggregated_table(cur, conn): 
+    with open('Nara/sql_aggregate.txt') as file: 
+        for line in file:
+          run_sql(line, cur, conn)
+          
+create_aggregated_table(cur, conn) 
+
+def breakdown_tables(cur, conn):
+  with open('Nara/sql_breakdown_tables.txt') as file: 
+    for line in file: 
+        run_sql(line, cur, conn)
+        
+#breakdown_tables(cur,conn)
 

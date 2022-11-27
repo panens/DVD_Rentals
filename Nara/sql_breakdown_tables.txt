@@ -1,0 +1,6 @@
+DROP TABLE dssa.fact_rental
+DROP TABLE dssa.customer
+DROP TABLE dssa.date
+DROP TABLE dssa.film
+DROP TABLE dssa.staff
+DROP TABLE dssa.store
