@@ -4,9 +4,13 @@ import psycopg2
 
 
 def create_cursor(): 
-    with open('.vscode/MasterPassword.txt') as MasterPassword:
-      MasterPass = MasterPassword.read()
-    conn = psycopg2.connect(host="localhost",port="5432", dbname="dvdrental",user="postgres",password=MasterPass)
+    credent = []
+    with open('.vscode/Credentials.txt') as file:
+      for line in file: 
+        line=line[0:-1]
+        credent.append(line)
+    print(credent)
+    conn = psycopg2.connect(host=credent[0],port=credent[1], dbname=credent[2],user=credent[3],password=credent[4])
     cur = conn.cursor() #creates cursor
     return cur, conn #returns cursor
     
@@ -39,5 +43,5 @@ def breakdown_tables(cur, conn):
     for line in file: 
         run_sql(line, cur, conn)
         
-#breakdown_tables(cur,conn)
+#breakdown_tables(cur,conn) #deletes all tables in order so no errors occur. 
 
