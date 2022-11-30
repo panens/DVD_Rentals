@@ -1,6 +1,6 @@
 import psycopg2
 from tasks import ConcreteTask as Task 
-#from queue import creation_queue, deletion_queue
+from queue import creation_queue, deletion_queue
 from dag import visualize_dag1, visualize_dag2
 
 '''
@@ -94,10 +94,20 @@ close_conn = Task(close_connection)
 '''
 ================Creating Queues================
 '''
-#create = creation_queue()
-#delete = deletion_queue()
+create = creation_queue()
+delete = deletion_queue()
 '''
 ================Creating Queues================
+'''
+
+
+'''
+================Creating DAGs================
+'''
+visualize_dag1()
+visualize_dag2()
+'''
+================Creating DAGs================
 '''
 
 def main() -> None: 
@@ -109,8 +119,7 @@ def main() -> None:
   
   
   
-  visualize_dag1()
-  visualize_dag2()
+  
   
   
   
