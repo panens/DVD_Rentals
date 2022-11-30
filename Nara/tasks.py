@@ -11,7 +11,7 @@ class AbstractTask(metaclass=ABCMeta):
         raise NotImplementedError("Must be implemented by every task")
 
 class ConcreteTask(AbstractTask): #concrete class
-    def __init__(self, function: Task):
+    def __init__(self, function: callable):
         self.function = function
     
     def run(self, *args, **kwargs): #provides implementation details. 
