@@ -1,5 +1,6 @@
 from collections import deque
 
+
 def creation_queue():  
     
     create_stack = deque()
@@ -10,7 +11,8 @@ def creation_queue():
     
     return create_stack
 
-#print(create_stack)
+create_stack = creation_queue()
+print(create_stack)
 
 def deletion_queue(): 
     
@@ -21,5 +23,6 @@ def deletion_queue():
     
     return delete_stack
 
-#print(delete_stack) 
+delete_stack = deletion_queue()
+print(delete_stack) 
 
