@@ -12,20 +12,17 @@ creation_graph.add_edges_from([("Connect","Create Dim Tables"),("Create Dim Tabl
 deletion_graph.add_edges_from([("Connect","Delete Tables"),("Delete Tables","Disconnect")])
 entire_graph.add_edges_from([("Connect","Create Dim Tables"),("Create Agg Table","Delete Tables"),("Create Dim Tables","Create Agg Table"),("Create Agg Table","Disconnect"),("Connect","Delete Tables"),("Delete Tables","Disconnect")])
 
-def visualize_dag1(): #function that creates dag visualization
+def visualize_dag(nodes_and_edges,name): #function that creates dag visualization
+    '''Creates a visualization of a DAG and saves it
+    Args:
+        nodes_and_edges (list): a list of all edges from which the nodes are inferred
+        name (str): name of how the file should be saved
+    '''
     plt.figure()
-    nx.draw_networkx(creation_graph, arrows = True, with_labels = True)
-    plt.savefig('DAGs/creation_dag.png', format="png")
+    nx.draw_networkx(nodes_and_edges, arrows = True, with_labels = True)
+    plt.savefig(f'DAGs/{name}.png', format="png")
     plt.clf()
-
-def visualize_dag2():
-    plt.figure()
-    nx.draw_networkx(deletion_graph, arrows = True, with_labels = True)
-    plt.savefig('DAGs/deletion_dag.png', format="png")
-    plt.clf()
-
-def visualize_dag3():
-    plt.figure()
-    nx.draw_networkx(entire_graph, arrows = True, with_labels = True)
-    plt.savefig('DAGs/entire_dag.png', format="png")
-    plt.clf()
+    
+visualize_dag(creation_graph, "creation_dag") #creates creation dag
+visualize_dag(deletion_graph, "deletion_dag") #creates deletion dag
+visualize_dag(entire_graph, "entire_dag") #creates entire dag

@@ -8,6 +8,11 @@ from dag import visualize_dag1, visualize_dag2, visualize_dag3
 '''
 
 def create_cursor(): #defines function
+    '''
+    1. Opens a connection.
+    2. Returns cur and conn objects that can be used later.
+    '''
+    
     credent = [] #creates empty list
     with open('.vscode/Credentials.txt') as file: #opens file with credentials 
       for line in file: #each line is a separate thing in the credentials file 
@@ -26,6 +31,12 @@ def create_cursor(): #defines function
 ================Runs given SQL statement on Given Connection================
 '''
 def run_sql(sql, cur, conn): 
+    '''Executes and commits an SQL Statement stored as a string
+    Args: 
+      sql (str): SQL statement as string to be executed
+      cur (object): cursor object that executes the SQL statement
+      conn (object): connection object that commits the executed SQL statement
+    '''
     
     cur.execute(sql) #runs the given sql command
     conn.commit() #commits the sql command that was ran. 
@@ -38,10 +49,17 @@ def run_sql(sql, cur, conn):
 ================Iterates Through SQL statements in sql_dimensions.txt file and uses run_sql funct================
 '''
 def create_dimension_tables(cur, conn):
-    with open('Nara/sql_dimensions.txt') as file: #open the txt file that has a sql statement in every line
-      for line in file: #for each line in the file 
-        run_sql(line,cur,conn) #use the line as the sql statement to be run. 
-    print("Dimension Tables Created") #after using the file and running all statements, prints Dimension Tables Created
+  '''Creates dimension tables
+    Args: 
+      cur (object): cursor object that executes the SQL statement
+      conn (object): connection object that commits the executed SQL statement
+    
+    The function will execute all statements in the sql_dimensions.txt file
+  '''
+  with open('Nara/sql_dimensions.txt') as file: #open the txt file that has a sql statement in every line
+    for line in file: #for each line in the file 
+      run_sql(line,cur,conn) #use the line as the sql statement to be run. 
+  print("Dimension Tables Created") #after using the file and running all statements, prints Dimension Tables Created
 '''
 ================Iterates Through SQL statements in sql_dimensions.txt file and uses run_sql funct================
 '''
@@ -50,11 +68,17 @@ def create_dimension_tables(cur, conn):
 ================Iterates Through SQL statements in sql_aggregate.txt file and uses run_sql funct================
 '''
 def create_aggregated_table(cur, conn): 
-  #identical to create_dimension_tables, just uses a different filepath
-    with open('Nara/sql_aggregate.txt') as file: 
-        for line in file: 
-          run_sql(line, cur, conn)
-    print("Aggregated Table Created")
+  '''Creates aggregated table
+    Args: 
+      cur (object): cursor object that executes the SQL statement
+      conn (object): connection object that commits the executed SQL statement
+    
+    The function will execute all statements in the sql_aggregate.txt file
+  '''
+  with open('Nara/sql_aggregate.txt') as file: 
+      for line in file: 
+        run_sql(line, cur, conn)
+  print("Aggregated Table Created")
 '''
 ================Iterates Through SQL statements in sql_aggregate.txt file and uses run_sql funct================
 '''
@@ -63,7 +87,14 @@ def create_aggregated_table(cur, conn):
 ================Iterates Through SQL statements in sql_breakdown_tables.txt file and uses run_sql funct================
 '''
 def breakdown_tables(cur, conn):
-  #identical to create_dimension_tables, just uses a different filepath
+  '''Deletes all tables
+    Args: 
+      cur (object): cursor object that executes the SQL statement
+      conn (object): connection object that commits the executed SQL statement
+    
+    The function will execute all statements in the sql_breakdown_tables.txt file
+  '''
+  
   with open('Nara/sql_breakdown_tables.txt') as file: 
     for line in file: 
         run_sql(line, cur, conn)
@@ -75,6 +106,11 @@ def breakdown_tables(cur, conn):
 ================Close Connection================
 '''
 def close_connection(cur, conn): #calling this function closes the connection
+  '''Closes the connection
+    Args: 
+      cur (object): cursor object that will close
+      conn (object): connection object that will close
+  '''
   cur.close() #closes the cursor first
   conn.close() #then closes the conn object
   print("Connection Closed") #prints the connection is closed 
@@ -105,22 +141,8 @@ full_queue = full_queue_time(30)
 ================Creating Queues================
 '''
 
-
-'''
-================Creating DAGs================
-'''
-visualize_dag1() #creates a visualization of a dag for creating the tables
-visualize_dag2() #creates a visualization of a dag for deleting the tables 
-visualize_dag3() #creates a visualization of both dags together in one picture. 
-'''
-================Creating DAGs================
-'''
-
 def main() -> None: 
-  
-  
-  
-  
+  print (close_connection.__doc__)
   
   
   
