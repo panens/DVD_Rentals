@@ -1,5 +1,5 @@
 import psycopg2
-from queue_module import creation_queue, deletion_queue 
+from queue_module import creation_queue, deletion_queue, full_queue_time
 from tasks import ConcreteTask as Task 
 from dag import visualize_dag1, visualize_dag2, visualize_dag3 
 
@@ -100,6 +100,7 @@ close_conn = Task(close_connection)
 '''
 create_queue = creation_queue() 
 delete_queue = deletion_queue()
+full_queue = full_queue_time(30)
 '''
 ================Creating Queues================
 '''
