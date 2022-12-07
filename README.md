@@ -9,7 +9,7 @@ Nara acts as a small data warehouse. Using a separate schema it creates a relati
 
 ## Project Structure
 
-*   `maellin` - This is the source code folder containing all application code and modules.
+*   `Nara` - This is the source code folder containing all application code and modules.
 *   `DAGs` - Directed Acyclic Graph describing the workflow. 
 *   `README` - Markdown file describing the project
 *   `requirements.txt` - list of python libraries to install with `pip`
