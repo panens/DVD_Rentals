@@ -1,17 +1,30 @@
 from collections import deque
 
 
-def creation_queue():  
+def create_queue(*args): 
+    '''Creates a queue from given tasks
+    Args: 
+      *args: can be tasks or int values 
+    
+    Returns:
+      create_stack: dequeu object containing the list of tasks (and ints for pauses) that needs to be completed. 
+    '''
     
     create_stack = deque() #creates an empty deque
-    create_stack.appendleft("close_conn") #adds last task to be completed first
-    create_stack.appendleft("create_agg") 
-    create_stack.appendleft("create_dim")
-    create_stack.appendleft("create_conn") #adds tasks until the first one to be executed
+    list_of_arguments = list() #instanciates an empty list
     
-    return create_stack
+    for j in args: #appends each argument in order to the list
+        list_of_arguments.append(j)
+    
+    list_of_arguments.reverse() #reverses the list
+    
+    for i in list_of_arguments: #appendsleft every item in the queue so they're in proper order. 
+        create_stack.appendleft(i)
+    
+    return create_stack #returns the created stack. 
 
-def deletion_queue(): 
+
+'''def deletion_queue(): 
     
     delete_stack = deque()
     delete_stack.appendleft("close_conn")
@@ -32,3 +45,4 @@ def full_queue_time(x:int):
     
     return full_stack
     
+'''

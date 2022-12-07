@@ -1,16 +1,23 @@
 import psycopg2
-from queue_module import creation_queue, deletion_queue, full_queue_time
+from queue_module import create_queue
 from tasks import ConcreteTask as Task 
-from dag import visualize_dag1, visualize_dag2, visualize_dag3 
+from dag import visualize_dag
+from worker import execute_queue
+import schedule 
+import time
+import threading
 
 '''
 ================Creating a Connection================
 '''
-
 def create_cursor(): #defines function
-    '''
-    1. Opens a connection.
-    2. Returns cur and conn objects that can be used later.
+    '''Opens a connection.
+    Args: 
+      None, but takes in values from Credentials.txt
+      
+    Returns: 
+      cur object that can be used later for executing SQL querries on the database
+      conn objects that can be used later to commit executed SQL querries to the database 
     '''
     
     credent = [] #creates empty list
@@ -21,11 +28,12 @@ def create_cursor(): #defines function
     conn = psycopg2.connect(host=credent[0],port=credent[1], dbname=credent[2],user=credent[3],password=credent[4]) #using psycopg2 to create a connection
     cur = conn.cursor() #creates cursor on the connection
     print("Connection Established") #prints that the connection is established 
-    return cur, conn #returns cursor and connection objects that can be used later 
-    
+    return cur, conn #returns cursor and connection objects that can be used later   
 '''
 ================Creating a Connection================
 '''
+
+
 
 '''
 ================Runs given SQL statement on Given Connection================
@@ -40,10 +48,11 @@ def run_sql(sql, cur, conn):
     
     cur.execute(sql) #runs the given sql command
     conn.commit() #commits the sql command that was ran. 
-    
 '''
 ================Runs given SQL statement on Given Connection================
 '''
+
+
 
 '''
 ================Iterates Through SQL statements in sql_dimensions.txt file and uses run_sql funct================
@@ -54,7 +63,7 @@ def create_dimension_tables(cur, conn):
       cur (object): cursor object that executes the SQL statement
       conn (object): connection object that commits the executed SQL statement
     
-    The function will execute all statements in the sql_dimensions.txt file
+    The function will execute all statements in the sql_dimensions.txt file per line
   '''
   with open('Nara/sql_dimensions.txt') as file: #open the txt file that has a sql statement in every line
     for line in file: #for each line in the file 
@@ -63,6 +72,8 @@ def create_dimension_tables(cur, conn):
 '''
 ================Iterates Through SQL statements in sql_dimensions.txt file and uses run_sql funct================
 '''
+
+
 
 '''
 ================Iterates Through SQL statements in sql_aggregate.txt file and uses run_sql funct================
@@ -82,7 +93,9 @@ def create_aggregated_table(cur, conn):
 '''
 ================Iterates Through SQL statements in sql_aggregate.txt file and uses run_sql funct================
 '''
-          
+
+
+
 '''
 ================Iterates Through SQL statements in sql_breakdown_tables.txt file and uses run_sql funct================
 '''
@@ -102,6 +115,10 @@ def breakdown_tables(cur, conn):
 '''
 ================Iterates Through SQL statements in sql_breakdown_tables.txt file and uses run_sql funct================
 '''
+
+
+
+
 '''
 ================Close Connection================
 '''
@@ -118,6 +135,9 @@ def close_connection(cur, conn): #calling this function closes the connection
 ================Close Connection================
 ''' 
 
+
+
+
 '''
 ================Assigning Tasks================
 '''
@@ -128,30 +148,67 @@ create_dim = Task(create_dimension_tables)
 create_agg = Task(create_aggregated_table) 
 breakdown = Task(breakdown_tables)
 close_conn = Task(close_connection)
+
+""" 
+This just shows how the tasks could be ran if queue, worker, and scheduler were not created. 
+ 
+cur, conn = create_conn.run() 
+create_dim.run(cur, conn)
+create_agg.run(cur, conn)
+#breakdown.run(cur, conn)
+close_conn.run(cur, conn) 
+"""
+
 '''
 ================Assigning Tasks================
 '''
+
+
+
 '''
 ================Creating Queues================
 '''
-create_queue = creation_queue() 
-delete_queue = deletion_queue()
-full_queue = full_queue_time(30)
+#Calls on the creqte_queue function from the queue module. 
+instanciate_queue = create_queue(create_conn,create_dim,create_agg,close_conn)
+breakdown_queue = create_queue(create_conn,breakdown,close_conn)
+complete_queue = create_queue(create_conn,create_dim,create_agg,breakdown,close_conn) 
+complete_queue_seconds = create_queue(create_conn,create_dim,create_agg,10,breakdown,close_conn)
 '''
 ================Creating Queues================
 '''
 
+
+
+'''
+================Creating a Schedule================
+'''
+
+#The following 2 lines ensure that every day all tables get created at 9:00am, and they get broken down at 5:00pm
+schedule.every().day.at("09:00").do(execute_queue, instanciate_queue)
+schedule.every().day.at("17:00").do(execute_queue, breakdown_queue)
+
+def nine_to_five():
+  while True:
+      schedule.run_pending()
+      time.sleep(1)
+      
+def concurent():
+  time.sleep(40)
+  print("This print task happens separate from execution of creation and breakdown of tables.")
+
+t1 = threading.Thread(target=nine_to_five)
+
+t2 = threading.Thread(target=concurent)
+
+'''
+================Creating a Schedule================
+'''
+
+
 def main() -> None: 
-  print (close_connection.__doc__)
-  
-  
-  
-  """cur, conn = create_conn.run()
-  create_dim.run(cur, conn)
-  create_agg.run(cur, conn)
-  #breakdown.run(cur, conn)
-  close_conn.run(cur, conn)"""
-  
+  t1.start() #runs first thread that runs the schedule nine_to_five 
+  t2.start() #runs second thread that has the concurent function in it 
+
   
   
 if __name__ == "__main__": 
