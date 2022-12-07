@@ -10,6 +10,14 @@ Nara acts as a small data warehouse. Using a separate schema it creates a relati
 ## Project Structure
 
 *   `Nara` - This is the source code folder containing all application code and modules.
+    1. `main.py` contains the main code for execution of the code as well as base functions that are called
+    2. `tasks.py` This module has contains the ConcreteTask class
+    3. `queue_module.py` This module defines a create_queue function that creates a queue from given tasks
+    4. `worker.py` This module creates a function that executes all the tasks in a given queue. 
+    5. `dag.py` creates a DAG based on nodes and edges given and saves the graph under the DAGs folder
+    6. `sql_dimensions.txt` Text file with SQL statements used to create and alter dimension tables
+    7. `sql_aggregate.txt` Text file with SQL statements used to create and alter aggregate table(s)
+    8. `sql_breakdown_tables.txt` Text file with SQL statements used to breakdown all tables
 *   `DAGs` - Directed Acyclic Graph describing the workflow. 
 *   `README` - Markdown file describing the project
 *   `requirements.txt` - list of python libraries to install with `pip`
