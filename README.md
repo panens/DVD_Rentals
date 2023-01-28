@@ -1,6 +1,3 @@
-# dssa_dw_final_project_panens
-This repository contains the final project for course DSSA 5102 - Data Gathering & Warehousing. 
-
 ## About Nara
 Nara is a light python project that easily connects to a database, builds a small relational database in a separate schema, and breaks it down. The original database is querried by SQL statements, and relations between tables are set up using SQL statements as well. This project also allows the scheduler to automate this task for us and it implements the use of threads so other threads can be ran while the scheduler is active. 
 
