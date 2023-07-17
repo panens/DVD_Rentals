@@ -65,10 +65,10 @@ def create_dimension_tables(cur, conn):
     
     The function will execute all statements in the sql_dimensions.txt file per line
   '''
-  with open('Nara/sql_dimensions.txt') as file: #open the txt file that has a sql statement in every line
+  with open('Nara/sql_practicum_dimensions.txt') as file: #open the txt file that has a sql statement in every line
     for line in file: #for each line in the file 
       run_sql(line,cur,conn) #use the line as the sql statement to be run. 
-  print("Dimension Tables Created") #after using the file and running all statements, prints Dimension Tables Created
+  print("Table Created") #after using the file and running all statements, prints Dimension Tables Created
 '''
 ================Iterates Through SQL statements in sql_dimensions.txt file and uses run_sql funct================
 '''
@@ -86,10 +86,10 @@ def create_aggregated_table(cur, conn):
     
     The function will execute all statements in the sql_aggregate.txt file
   '''
-  with open('Nara/sql_aggregate.txt') as file: 
-      for line in file: 
-        run_sql(line, cur, conn)
-  print("Aggregated Table Created")
+  #with open('Nara/sql_aggregate.txt') as file: 
+      #for line in file: 
+        #run_sql(line, cur, conn)
+  print("No Agg Table Needed")
 '''
 ================Iterates Through SQL statements in sql_aggregate.txt file and uses run_sql funct================
 '''
@@ -108,10 +108,10 @@ def breakdown_tables(cur, conn):
     The function will execute all statements in the sql_breakdown_tables.txt file
   '''
   
-  with open('Nara/sql_breakdown_tables.txt') as file: 
+  with open('Nara/sql_practicum_delete.txt') as file: 
     for line in file: 
         run_sql(line, cur, conn)
-  print("Tables Deleted")
+  print("Table Deleted")
 '''
 ================Iterates Through SQL statements in sql_breakdown_tables.txt file and uses run_sql funct================
 '''
@@ -184,10 +184,10 @@ complete_queue_seconds = create_queue(create_conn,create_dim,create_agg,10,break
 '''
 
 #The following 2 lines ensure that every day all tables get created at 9:00am, and they get broken down at 5:00pm
-schedule.every().day.at("14:26").do(execute_queue, instanciate_queue)
-schedule.every().day.at("14:25").do(execute_queue, breakdown_queue)
+schedule.every().day.at("09:00").do(execute_queue, instanciate_queue)
+schedule.every().day.at("09:30").do(execute_queue, breakdown_queue)
 
-def nine_to_five():
+def working_hours():
   while True:
       schedule.run_pending()
       time.sleep(1)
@@ -196,9 +196,9 @@ def concurent():
   time.sleep(40)
   print("This print task happens separate from execution of creation and breakdown of tables.")
 
-t1 = threading.Thread(target=nine_to_five)
+t1 = threading.Thread(target=working_hours)
 
-t2 = threading.Thread(target=concurent)
+#t2 = threading.Thread(target=concurent)
 
 '''
 ================Creating a Schedule================
@@ -206,8 +206,8 @@ t2 = threading.Thread(target=concurent)
 
 
 def main() -> None: 
-  t1.start() #runs first thread that runs the schedule nine_to_five 
-  t2.start() #runs second thread that has the concurent function in it 
+  t1.start() #runs first thread that runs the schedule working_hours 
+  #t2.start() #runs second thread that has the concurent function in it 
 
   
   
